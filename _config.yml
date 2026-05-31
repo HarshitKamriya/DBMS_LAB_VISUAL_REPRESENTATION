@@ -1,0 +1,13 @@
+# GitHub Pages Configuration
+theme: jekyll-theme-slate
+markdown: kramdown
+
+# Build settings
+exclude:
+  - .git
+  - .gitignore
+  - README.md
+  - QUERY_COMPILATION.md
+
+plugins:
+  - jekyll-feed
