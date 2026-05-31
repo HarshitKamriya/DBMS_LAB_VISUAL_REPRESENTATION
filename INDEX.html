@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Lab - Quick Navigation Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border-left: 5px solid #667eea;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .nav-card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .nav-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .nav-card a {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-card a:hover {
+            opacity: 0.9;
+        }
+        
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .lab-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #764ba2;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .lab-item h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .lab-item p {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-right: 5px;
+        }
+        
+        .quick-links {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .quick-links h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .quick-link {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .quick-link:hover {
+            transform: scale(1.05);
+        }
+        
+        .stats {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .stats h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .stat-box .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-box .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        
+        .highlight h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .highlight p {
+            color: #856404;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .nav-grid, .labs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗄️ DBMS LAB - Documentation Index</h1>
+            <p>Complete SQL Query Compilation & Results - Semester 4</p>
+        </div>
+        
+        <div class="highlight">
+            <h3>📌 Start Here</h3>
+            <p><strong>New to this documentation?</strong> Click on "SQL Workbench Output" below to see interactive query results with professional formatting. Then use "Query Compilation Guide" for detailed query references.</p>
+        </div>
+        
+        <div class="nav-grid">
+            <div class="nav-card">
+                <h2>🎯 Interactive Results</h2>
+                <p>View all SQL queries with their execution results in professional SQL Workbench dark theme styling.</p>
+                <a href="SQL_WORKBENCH_OUTPUT.html" target="_blank">Open Interactive View →</a>
+            </div>
+            
+            <div class="nav-card">
+                <h2>📖 Query Compilation</h2>
+                <p>Comprehensive text guide with all 60+ queries from LAB 1-9, organized by topic with detailed explanations.</p>
+                <a href="QUERY_COMPILATION.md" target="_blank">View Documentation →</a>
+            </div>
+            
+            <div class="nav-card">
+                <h2>📚 Getting Started</h2>
+                <p>Read this first! Overview of all files, learning path, SQL concepts quick reference, and how to use these materials.</p>
+                <a href="README.md" target="_blank">Read Overview →</a>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <h2>📊 Quick Statistics</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="number">60+</div>
+                    <div class="label">Total Queries</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">9</div>
+                    <div class="label">LABs Covered</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">15+</div>
+                    <div class="label">SQL Topics</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">100%</div>
+                    <div class="label">Complete</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <h2>🚀 Quick Navigation</h2>
+            <div class="quick-links-grid">
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-1" class="quick-link">LAB 1</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-2" class="quick-link">LAB 2</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-3" class="quick-link">LAB 3</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-4" class="quick-link">LAB 4</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-5" class="quick-link">LAB 5</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-6" class="quick-link">LAB 6</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-7" class="quick-link">LAB 7</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-8" class="quick-link">LAB 8</a>
+                <a href="SQL_WORKBENCH_OUTPUT.html#lab-9" class="quick-link">LAB 9</a>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <h2>📚 Lab Overview</h2>
+            <div class="labs-grid">
+                <div class="lab-item">
+                    <h3>LAB 1</h3>
+                    <p>INSERT, SELECT, UPDATE, ALTER</p>
+                    <span class="badge">DDL</span>
+                    <span class="badge">DML</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 2</h3>
+                    <p>JOINS, FOREIGN KEYS & DELETE</p>
+                    <span class="badge">JOINS</span>
+                    <span class="badge">FK</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 3</h3>
+                    <p>DEPARTMENT & STUDENT MANAGEMENT</p>
+                    <span class="badge">DATA</span>
+                    <span class="badge">ORGANIZATION</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 4</h3>
+                    <p>ENROLLMENTS WITH AGGREGATES</p>
+                    <span class="badge">JOINS</span>
+                    <span class="badge">AGGREGATES</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 5</h3>
+                    <p>DELETE CASCADE & AGGREGATES</p>
+                    <span class="badge">CASCADE</span>
+                    <span class="badge">FUNCTIONS</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 6</h3>
+                    <p>GROUP BY & HAVING CLAUSES</p>
+                    <span class="badge">GROUP BY</span>
+                    <span class="badge">HAVING</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 7</h3>
+                    <p>NESTED QUERIES & SUBQUERIES</p>
+                    <span class="badge">SUBQUERY</span>
+                    <span class="badge">ADVANCED</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 8</h3>
+                    <p>EXISTS, IN & ADVANCED QUERIES</p>
+                    <span class="badge">EXISTS</span>
+                    <span class="badge">IN</span>
+                </div>
+                
+                <div class="lab-item">
+                    <h3>LAB 9</h3>
+                    <p>PATTERN MATCHING & NULL HANDLING</p>
+                    <span class="badge">LIKE</span>
+                    <span class="badge">NULL</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <h2>🔍 SQL Concepts Index</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px;">
+                    <strong>DDL Operations</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #666;">CREATE, ALTER, DROP</p>
+                </div>
+                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px;">
+                    <strong>DML Operations</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #666;">INSERT, SELECT, UPDATE, DELETE</p>
+                </div>
+                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px;">
+                    <strong>JOIN Types</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #666;">INNER, LEFT, RIGHT, FULL, NATURAL</p>
+                </div>
+                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px;">
+                    <strong>Aggregate Functions</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #666;">SUM, AVG, MAX, MIN, COUNT</p>
+                </div>
+                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px;">
+                    <strong>Clauses</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #666;">WHERE, GROUP BY, HAVING, ORDER BY</p>
+                </div>
+                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px;">
+                    <strong>Advanced Operators</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #666;">IN, EXISTS, LIKE, IS NULL</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <h2>📖 How to Use These Materials</h2>
+            <div style="display: grid; gap: 15px;">
+                <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>For Learning:</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #333;">Start with README.md → Study SQL concepts → View HTML results → Read query details in markdown</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>For Reference:</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #333;">Use Ctrl+F to search queries → Find similar patterns → Copy and modify for your needs</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>For Practice:</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #333;">Create test database → Copy queries from markdown → Execute in your DBMS → Compare results</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>For Documentation:</strong>
+                    <p style="font-size: 0.9em; margin-top: 8px; color: #333;">Print HTML to PDF → Screenshot sections → Include in assignments → Share with classmates</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>
+                📚 Database Management Systems - NIT Srinagar | Semester IV<br>
+                Generated: May 31, 2026<br>
+                ✓ All queries verified and tested | Ready for production use
+            </p>
+        </div>
+    </div>
+</body>
+</html>

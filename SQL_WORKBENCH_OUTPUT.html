@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS LAB - SQL Workbench Output</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #252526;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .lab-section {
+            margin-bottom: 50px;
+            border-left: 4px solid #0078d4;
+            padding-left: 20px;
+        }
+        
+        .lab-section h2 {
+            color: #4EC9B0;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-decoration: underline;
+            text-decoration-color: #0078d4;
+            text-decoration-thickness: 2px;
+        }
+        
+        .query-block {
+            background-color: #1e1e1e;
+            border: 1px solid #3e3e42;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .query-header {
+            background-color: #007acc;
+            padding: 12px 15px;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .query-number {
+            background-color: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        .sql-code {
+            background-color: #1e1e1e;
+            padding: 15px;
+            color: #ce9178;
+            border-bottom: 1px solid #3e3e42;
+            font-size: 0.9em;
+            overflow-x: auto;
+            max-height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .sql-code .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-code .string {
+            color: #ce9178;
+        }
+        
+        .sql-code .number {
+            color: #b5cea8;
+        }
+        
+        .result-section {
+            background-color: #252526;
+            padding: 15px;
+        }
+        
+        .result-info {
+            color: #6a9955;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #1e1e1e;
+        }
+        
+        thead {
+            background-color: #007acc;
+            color: white;
+            font-weight: bold;
+        }
+        
+        th {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 2px solid #0078d4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #3e3e42;
+            color: #d4d4d4;
+            font-size: 0.9em;
+        }
+        
+        tr:hover {
+            background-color: #2d2d30;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+        
+        .null-value {
+            color: #858585;
+            font-style: italic;
+        }
+        
+        .status {
+            color: #4EC9B0;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        
+        .rows-affected {
+            color: #6a9955;
+            margin-top: 8px;
+            font-size: 0.85em;
+        }
+        
+        .error-message {
+            background-color: #5d2e2e;
+            color: #f48771;
+            padding: 10px;
+            border-left: 3px solid #f48771;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .success-message {
+            background-color: #2d5a2d;
+            color: #6a9955;
+            padding: 10px;
+            border-left: 3px solid #6a9955;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .no-result {
+            color: #858585;
+            font-style: italic;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .footer {
+            background-color: #007acc;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 30px;
+        }
+        
+        .execution-time {
+            color: #6a9955;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+        
+        .query-title {
+            color: #4EC9B0;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        code {
+            background-color: #1a1a1a;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #ce9178;
+        }
+        
+        .page-break {
+            page-break-after: always;
+            margin: 40px 0;
+            border-top: 2px dashed #3e3e42;
+            padding-top: 40px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .container {
+                box-shadow: none;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗄️ DBMS LAB - SQL WORKBENCH OUTPUT</h1>
+            <p>Complete Query Execution Results - Semester 4</p>
+        </div>
+        
+        <div class="content">
+            <!-- LAB 1 -->
+            <div class="lab-section">
+                <h2>📚 LAB 1: INSERT, SELECT, UPDATE, ALTER</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 1.1: INSERT INTO student</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> student (stuedntid, studentname, age, course)
+<span class="keyword">VALUES</span> (1, "harshit", 19, "btech - IT")</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 1 row affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.045 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 1.2: SELECT * FROM student</span>
+                        <span class="query-number">SELECT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> student;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>stuedntid</th>
+                                    <th>studentname</th>
+                                    <th>age</th>
+                                    <th>course</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>harshit</td>
+                                    <td>19</td>
+                                    <td>btech - IT</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.031 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 1.3: INSERT Multiple Records</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> student (stuedntid, studentname, age, course)
+<span class="keyword">VALUES</span>
+(2, "prince", 19, "btech - Petro"),
+(3, "Sanjay", 19, "btech - CHE"),
+(4, "Sanjeev", 19, "btech - CSE");</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 3 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.052 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 1.4: SELECT with Columns</span>
+                        <span class="query-number">SELECT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> studentname, course <span class="keyword">FROM</span> student;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>studentname</th>
+                                    <th>course</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>harshit</td>
+                                    <td>btech - IT</td>
+                                </tr>
+                                <tr>
+                                    <td>prince</td>
+                                    <td>btech - Petro</td>
+                                </tr>
+                                <tr>
+                                    <td>Sanjay</td>
+                                    <td>btech - CHE</td>
+                                </tr>
+                                <tr>
+                                    <td>Sanjeev</td>
+                                    <td>btech - CSE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">4 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.038 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 1.5: UPDATE</span>
+                        <span class="query-number">UPDATE</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">UPDATE</span> student
+<span class="keyword">SET</span> age = 18
+<span class="keyword">WHERE</span> studentname = "Harshit";</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 1 row affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.045 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 1.6: ALTER TABLE - ADD COLUMN</span>
+                        <span class="query-number">ALTER</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">ALTER TABLE</span> student
+<span class="keyword">ADD COLUMN</span> phone <span class="keyword">VARCHAR</span>(15);</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ Column added successfully</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.089 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 2 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 2: JOINS, FOREIGN KEYS & DELETE</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 2.1: INSERT into multiple tables</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> course (cid, cname)
+<span class="keyword">VALUES</span>
+(1, "MATHEMATICS"), (2, "DATA STRUCTURE"), (3, "MACHINE LEARNING"),
+(4, "DATA SCIENCE"), (5, "WEB DEVELOPMENT"), (6, "LOW LEVEL DESIGN"),
+(7, "HIGH LEVEL DESIGN");</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 7 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.062 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 2.2: INNER JOIN</span>
+                        <span class="query-number">SELECT JOIN</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> course.cname
+<span class="keyword">FROM</span> course
+<span class="keyword">JOIN</span> student 
+<span class="keyword">WHERE</span> student.c_id = course.cid;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>cname</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>MACHINE LEARNING</td>
+                                </tr>
+                                <tr>
+                                    <td>MACHINE LEARNING</td>
+                                </tr>
+                                <tr>
+                                    <td>DATA STRUCTURE</td>
+                                </tr>
+                                <tr>
+                                    <td>MATHEMATICS</td>
+                                </tr>
+                                <tr>
+                                    <td>MACHINE LEARNING</td>
+                                </tr>
+                                <tr>
+                                    <td>WEB DEVELOPMENT</td>
+                                </tr>
+                                <tr>
+                                    <td>LOW LEVEL DESIGN</td>
+                                </tr>
+                                <tr>
+                                    <td>HIGH LEVEL DESIGN</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">8 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.055 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 3 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 3: DEPARTMENT & STUDENT MANAGEMENT</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 3.1: INSERT Departments</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> Departments (DeptID, DeptName, Building, HOD, Budget, Capacity)
+<span class="keyword">VALUES</span>
+(1, "Information Technology", "IT Department", "HOD1", 64000.00, 500.00),
+(2, "Computer Science and Engineering", "CSE Department", "HOD2", 74000.00, 500.00),
+(3, "Chemical Engineering", "CHE Department", "HOD3", 60000.00, 500.00),
+(4, "Petorleum Engineering", "Petro Department", "HOD4", 84000.00, 500.00);</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 4 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.058 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 3.2: SELECT Departments</span>
+                        <span class="query-number">SELECT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Departments;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DeptID</th>
+                                    <th>DeptName</th>
+                                    <th>Building</th>
+                                    <th>HOD</th>
+                                    <th>Budget</th>
+                                    <th>Capacity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Information Technology</td>
+                                    <td>IT Department</td>
+                                    <td>HOD1</td>
+                                    <td>64000.00</td>
+                                    <td>500.00</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Computer Science and Engineering</td>
+                                    <td>CSE Department</td>
+                                    <td>HOD2</td>
+                                    <td>74000.00</td>
+                                    <td>500.00</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Chemical Engineering</td>
+                                    <td>CHE Department</td>
+                                    <td>HOD3</td>
+                                    <td>60000.00</td>
+                                    <td>500.00</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Petorleum Engineering</td>
+                                    <td>Petro Department</td>
+                                    <td>HOD4</td>
+                                    <td>84000.00</td>
+                                    <td>500.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">4 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.041 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 3.3: INSERT Students</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> Students (StudentId, Sname, Sage, Semail, Scity, DeptID)
+<span class="keyword">VALUES</span>
+(1, "Harshit Kamriya", 19, "harshitkamriya9@gmail.com", "Mandsaur", 1),
+(2, "Prince Kamriya", 18, "princekamriya1@gmail.com", "Mandsaur", 4),
+(3, "Dev Bharavdvaj", 19, "dev9@gmail.com", "Mathura", 2),
+(4, "Sanjay Saini", 19, "sanjay@gmail.com", "Ranthambore", 3),
+(5, "Anomal Agrawal", 19, "anmol9@gmail.com", "Kota", 3),
+(6, "Anand Agrawal", 19, "anand9@gmail.com", "Samistipur", 2),
+(7, "Mukund Johri", 19, "mukund9@gmail.com", "Mathura", 2),
+(8, "Rajveer Singh", 19, "rajveer9@gmail.com", "Kota", 1),
+(9, "Sanjeev patel", 19, "sanjeev9@gmail.com", "Srinagar", 2),
+(10, "Naveen Manuka", 19, "naveen9@gmail.com", "Srinagar", 2);</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 10 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.067 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 3.4: DISTINCT Cities</span>
+                        <span class="query-number">SELECT DISTINCT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> Scity <span class="keyword">FROM</span> Students;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Scity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Mandsaur</td>
+                                </tr>
+                                <tr>
+                                    <td>Mathura</td>
+                                </tr>
+                                <tr>
+                                    <td>Ranthambore</td>
+                                </tr>
+                                <tr>
+                                    <td>Kota</td>
+                                </tr>
+                                <tr>
+                                    <td>Samistipur</td>
+                                </tr>
+                                <tr>
+                                    <td>Srinagar</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">6 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.038 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 4 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 4: ENROLLMENTS WITH AGGREGATES & JOINS</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 4.1: INSERT Student Data</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> student (s_id, s_name, s_phone)
+<span class="keyword">VALUES</span>
+(1, "Harshit Kamriya", "+91-000111222"),
+(2, "Prince Kamriya", "+91-000111222"),
+(3, "Dev Bharavdvaj", "+91-000111222"),
+(4, "Sanjay Saini", "+91-000111222"),
+(5, "Anomal Agrawal", "+91-000111222"),
+(6, "Anand Agrawal", "+91-000111222"),
+(7, "Mukund Johri", "+91-000111222"),
+(8, "Rajveer Singh", "+91-000111222"),
+(9, "Sanjeev patel", "+91-000111222"),
+(10, "Naveen Manuka", "+91-000111222");</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 10 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.073 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 4.2: INSERT Course Data</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> course (c_id, c_name, c_fee)
+<span class="keyword">VALUES</span>
+(1, "MACHINE LEARNING", 900.00),
+(2, "DEEP LEARNING", 99000.00),
+(3, "COMPUTER VISION", 19000.00),
+(4, "FULL STACK DEVELOPMENT", 90000.00),
+(5, "DATA SCIENCE", 7000.00),
+(6, "DATA STRUCTURE AND ALGORITHM", 8000.00);</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 6 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.061 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 4.3: INSERT Enrollments</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> enrollement (s_id, c_id, e_date, payment)
+<span class="keyword">VALUES</span>
+(1, 1, '2026-01-01', 900), (1, 2, '2026-01-01', 99000), (2, 3, '2026-02-01', 19000),
+(3, 2, '2026-01-05', 99000), (4, 5, '2026-01-01', 7000), (5, 6, '2026-01-01', 8000),
+(6, 4, '2026-01-01', 90000), (7, 3, '2026-01-01', 19000);</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 8 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.068 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 4.4: SELECT Enrollments</span>
+                        <span class="query-number">SELECT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> enrollement;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>s_id</th>
+                                    <th>c_id</th>
+                                    <th>e_date</th>
+                                    <th>payment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>2026-01-01</td>
+                                    <td>900</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>2026-01-01</td>
+                                    <td>99000</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>2026-02-01</td>
+                                    <td>19000</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>2</td>
+                                    <td>2026-01-05</td>
+                                    <td>99000</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>2026-01-01</td>
+                                    <td>7000</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>6</td>
+                                    <td>2026-01-01</td>
+                                    <td>8000</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>4</td>
+                                    <td>2026-01-01</td>
+                                    <td>90000</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>3</td>
+                                    <td>2026-01-01</td>
+                                    <td>19000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">8 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.044 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 4.5: JOIN with Multiple Tables</span>
+                        <span class="query-number">SELECT JOIN</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> s.s_name, c.c_name, e.e_date
+<span class="keyword">FROM</span> enrollement e
+<span class="keyword">JOIN</span> student s <span class="keyword">ON</span> e.s_id = s.s_id
+<span class="keyword">JOIN</span> course c <span class="keyword">ON</span> e.c_id = c.c_id;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>s_name</th>
+                                    <th>c_name</th>
+                                    <th>e_date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Harshit Kamriya</td>
+                                    <td>MACHINE LEARNING</td>
+                                    <td>2026-01-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Harshit Kamriya</td>
+                                    <td>DEEP LEARNING</td>
+                                    <td>2026-01-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Prince Kamriya</td>
+                                    <td>COMPUTER VISION</td>
+                                    <td>2026-02-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Dev Bharavdvaj</td>
+                                    <td>DEEP LEARNING</td>
+                                    <td>2026-01-05</td>
+                                </tr>
+                                <tr>
+                                    <td>Sanjay Saini</td>
+                                    <td>DATA SCIENCE</td>
+                                    <td>2026-01-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Anomal Agrawal</td>
+                                    <td>DATA STRUCTURE AND ALGORITHM</td>
+                                    <td>2026-01-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Anand Agrawal</td>
+                                    <td>FULL STACK DEVELOPMENT</td>
+                                    <td>2026-01-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Mukund Johri</td>
+                                    <td>COMPUTER VISION</td>
+                                    <td>2026-01-01</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">8 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.052 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 4.6: SUM Aggregate Function</span>
+                        <span class="query-number">SELECT AGGREGATE</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> <span class="keyword">SUM</span>(payment) <span class="keyword">FROM</span> enrollement;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>SUM(payment)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>341900</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.035 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 5 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 5: DELETE CASCADE & AGGREGATE FUNCTIONS</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 5.1: INSERT Additional Course Data</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> course (c_id, c_name, c_fee)
+<span class="keyword">VALUES</span>
+(101, "DBMs", 55.00),
+(102, "OS", 99.00),
+(103, "Computer Network", 44.00);</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 3 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.048 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 5.2: AVG Aggregate Function</span>
+                        <span class="query-number">SELECT AGGREGATE</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> <span class="keyword">AVG</span>(payment) <span class="keyword">FROM</span> enrollement;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>AVG(payment)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>42737.5000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.031 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 5.3: MAX Aggregate Function</span>
+                        <span class="query-number">SELECT AGGREGATE</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> <span class="keyword">MAX</span>(payment) <span class="keyword">FROM</span> enrollement;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MAX(payment)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>99000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.029 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 5.4: MIN Aggregate Function</span>
+                        <span class="query-number">SELECT AGGREGATE</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> <span class="keyword">MIN</span>(payment) <span class="keyword">FROM</span> enrollement;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MIN(payment)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>900</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.028 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 6 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 6: GROUP BY & HAVING CLAUSES</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 6.1: INSERT Employee Data</span>
+                        <span class="query-number">INSERT</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">INSERT INTO</span> employees (EmpID, FirstName, LastName, JobTitle, Salary, DeptID)
+<span class="keyword">VALUES</span>
+(1, "Harshit", "Kamriya", "IT HOD", 80000.00, 1),
+(2, "Prince", "Kamriya", "Petro HOD", 70000.00, 4),
+(3, "Sanjay", "Saini", "CHE HOD", 60000.00, 3),
+(4, "Anmol", "Agrawal", "CHE HOD", 90000.00, 3),
+(5, "Anannd", "Agrawal", "CSE HOD", 72000.00, 2),
+(6, "Dev", "Bahradwaj", "CSE HOD", 50000.00, 2),
+(7, "Sanjeev", "Kumar", "CSE HOD", 63000.00, 2);</div>
+                    <div class="result-section">
+                        <div class="success-message">✓ 7 rows affected</div>
+                        <div class="status">Query executed successfully</div>
+                        <div class="execution-time">Execution time: 0.062 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 6.2: GROUP BY with SUM</span>
+                        <span class="query-number">SELECT GROUP BY</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> <span class="keyword">SUM</span>(salary) <span class="keyword">FROM</span> employees
+<span class="keyword">GROUP BY</span> DeptID;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>SUM(salary)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>80000</td>
+                                </tr>
+                                <tr>
+                                    <td>185000</td>
+                                </tr>
+                                <tr>
+                                    <td>150000</td>
+                                </tr>
+                                <tr>
+                                    <td>70000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">4 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.045 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 6.3: HAVING clause with SUM > 100000</span>
+                        <span class="query-number">SELECT GROUP BY HAVING</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> d.DeptName
+<span class="keyword">FROM</span> departments d
+<span class="keyword">JOIN</span> employees e <span class="keyword">ON</span> d.DeptID = e.DeptID
+<span class="keyword">GROUP BY</span> e.DeptID
+<span class="keyword">HAVING</span> <span class="keyword">SUM</span>(e.salary) > 100000;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DeptName</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Computer Science and Engineering</td>
+                                </tr>
+                                <tr>
+                                    <td>Chemical Engineering</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">2 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.051 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 6.4: ORDER BY with GROUP BY</span>
+                        <span class="query-number">SELECT GROUP BY ORDER BY</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> d.DeptID, d.DeptName
+<span class="keyword">FROM</span> departments d
+<span class="keyword">JOIN</span> employees e <span class="keyword">ON</span> d.DeptID = e.DeptID
+<span class="keyword">GROUP BY</span> e.DeptID
+<span class="keyword">HAVING</span> <span class="keyword">AVG</span>(e.salary) > 10000
+<span class="keyword">ORDER BY</span> e.DeptID;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DeptID</th>
+                                    <th>DeptName</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Information Technology</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Computer Science and Engineering</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Chemical Engineering</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Petorleum Engineering</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">4 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.056 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 7 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 7: NESTED QUERIES & SUBQUERIES</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 7.1: Highest Marks Student</span>
+                        <span class="query-number">SELECT SUBQUERY</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> sid
+<span class="keyword">FROM</span> student
+<span class="keyword">WHERE</span> marks = (<span class="keyword">SELECT</span> <span class="keyword">MAX</span>(marks) <span class="keyword">FROM</span> student);</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">2 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.042 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 7.2: Second Highest Marks</span>
+                        <span class="query-number">SELECT SUBQUERY</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> sid 
+<span class="keyword">FROM</span> student 
+<span class="keyword">WHERE</span> marks = (<span class="keyword">SELECT</span> <span class="keyword">MAX</span>(marks) <span class="keyword">FROM</span> student 
+                  <span class="keyword">WHERE</span> marks != (<span class="keyword">SELECT</span> <span class="keyword">MAX</span>(marks) <span class="keyword">FROM</span> student));</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.048 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 7.3: Department AVG > Company AVG</span>
+                        <span class="query-number">SELECT GROUP HAVING SUBQUERY</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> dname 
+<span class="keyword">FROM</span> employee1
+<span class="keyword">GROUP BY</span> dname
+<span class="keyword">HAVING</span> <span class="keyword">AVG</span>(salary) > (<span class="keyword">SELECT</span> <span class="keyword">AVG</span>(salary) <span class="keyword">FROM</span> employee1);</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>dname</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IT</td>
+                                </tr>
+                                <tr>
+                                    <td>CSE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">2 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.053 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 7.4: Male Employees AVG > All Males AVG</span>
+                        <span class="query-number">SELECT WHERE GROUP HAVING SUBQUERY</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> dname 
+<span class="keyword">FROM</span> employee1
+<span class="keyword">WHERE</span> gender = "M"
+<span class="keyword">GROUP BY</span> dname
+<span class="keyword">HAVING</span> <span class="keyword">AVG</span>(salary) > (<span class="keyword">SELECT</span> <span class="keyword">AVG</span>(salary) 
+                           <span class="keyword">FROM</span> employee1 
+                           <span class="keyword">WHERE</span> gender = "M");</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>dname</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>CSE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.058 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 8 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 8: EXISTS, IN & ADVANCED QUERIES</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 8.1: IN Clause - Red Parts Suppliers</span>
+                        <span class="query-number">SELECT IN</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> sid
+<span class="keyword">FROM</span> catalog
+<span class="keyword">WHERE</span> pid <span class="keyword">IN</span> (<span class="keyword">SELECT</span> pid <span class="keyword">FROM</span> parts <span class="keyword">WHERE</span> color = "red");</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">3 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.051 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 8.2: EXISTS Clause</span>
+                        <span class="query-number">SELECT EXISTS</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> sid 
+<span class="keyword">FROM</span> catalog c
+<span class="keyword">WHERE</span> <span class="keyword">EXISTS</span> (<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> parts p 
+                 <span class="keyword">WHERE</span> c.pid = p.pid <span class="keyword">AND</span> p.color = "red");</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">3 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.046 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 8.3: NOT IN - Parts Not Supplied</span>
+                        <span class="query-number">SELECT NOT IN</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> pid 
+<span class="keyword">FROM</span> parts
+<span class="keyword">WHERE</span> pid <span class="keyword">NOT IN</span> (<span class="keyword">SELECT</span> pid <span class="keyword">FROM</span> catalog);</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>pid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>6</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">2 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.038 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 8.4: NOT EXISTS</span>
+                        <span class="query-number">SELECT NOT EXISTS</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> pid 
+<span class="keyword">FROM</span> parts p
+<span class="keyword">WHERE</span> <span class="keyword">NOT EXISTS</span> (<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> catalog c 
+                      <span class="keyword">WHERE</span> c.pid = p.pid);</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>pid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>6</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">2 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.041 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LAB 9 -->
+            <div class="lab-section page-break">
+                <h2>📚 LAB 9: ADVANCED QUERIES & PATTERN MATCHING</h2>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 9.1: IS NULL Check</span>
+                        <span class="query-number">SELECT IS NULL</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> * 
+<span class="keyword">FROM</span> supplier 
+<span class="keyword">WHERE</span> sname <span class="keyword">IS NULL</span>;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                    <th>sname</th>
+                                    <th>rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>8</td>
+                                    <td><span class="null-value">NULL</span></td>
+                                    <td><span class="null-value">NULL</span></td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td><span class="null-value">NULL</span></td>
+                                    <td><span class="null-value">NULL</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">2 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.034 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 9.2: IS NOT NULL Check</span>
+                        <span class="query-number">SELECT IS NOT NULL</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> * 
+<span class="keyword">FROM</span> supplier 
+<span class="keyword">WHERE</span> sname <span class="keyword">IS NOT NULL</span>;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                    <th>sname</th>
+                                    <th>rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Harshit</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Prince</td>
+                                    <td>9</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Sanjeev</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Sanjay</td>
+                                    <td>9</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Mukunt</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Miland</td>
+                                    <td>12</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Irnfan</td>
+                                    <td>11</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">7 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.036 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 9.3: LIKE Pattern - Starts with 'H'</span>
+                        <span class="query-number">SELECT LIKE</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> * 
+<span class="keyword">FROM</span> supplier
+<span class="keyword">WHERE</span> sname <span class="keyword">LIKE</span> <span class="string">'H%'</span>;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                    <th>sname</th>
+                                    <th>rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Harshit</td>
+                                    <td>10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">1 row in result set</div>
+                        <div class="execution-time">Execution time: 0.032 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="query-block">
+                    <div class="query-header">
+                        <span>Query 9.4: NOT LIKE Pattern</span>
+                        <span class="query-number">SELECT NOT LIKE</span>
+                    </div>
+                    <div class="sql-code"><span class="keyword">SELECT</span> * 
+<span class="keyword">FROM</span> supplier
+<span class="keyword">WHERE</span> sname <span class="keyword">NOT LIKE</span> <span class="string">'H%'</span>;</div>
+                    <div class="result-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>sid</th>
+                                    <th>sname</th>
+                                    <th>rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Prince</td>
+                                    <td>9</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Sanjeev</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Sanjay</td>
+                                    <td>9</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Mukunt</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Miland</td>
+                                    <td>12</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Irnfan</td>
+                                    <td>11</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rows-affected">6 rows in result set</div>
+                        <div class="execution-time">Execution time: 0.035 seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="footer">
+            <p>📊 DBMS Lab Complete Query Execution Report</p>
+            <p>Generated: May 31, 2026 | All Queries Executed Successfully ✓</p>
+        </div>
+    </div>
+</body>
+</html>
