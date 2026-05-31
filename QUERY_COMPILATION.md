@@ -17,6 +17,7 @@
 - [LAB 8: EXISTS, IN & ADVANCED QUERIES](#lab-8)
 - [LAB 9: ADVANCED QUERIES & PATTERN MATCHING](#lab-9)
 
+
 ---
 
 <a name="lab-1"></a>
